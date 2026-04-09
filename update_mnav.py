@@ -15,6 +15,7 @@ def get_data():
         exit(1)
 
     # 1. Get BTC Holdings from CoinGecko
+    # We use the 'bitcoin' treasury endpoint
     url = "https://api.coingecko.com/api/v3/companies/public_treasury/bitcoin"
     headers = {
         "accept": "application/json",
@@ -28,33 +29,43 @@ def get_data():
         exit(1)
 
     data = response.json()
-    
-    # Safely find MicroStrategy
     companies = data.get('companies', [])
-    mstr_btc_data = next((c for c in companies if c['symbol'] == 'MSTR'), None)
+
+    # In 2026, MSTR is listed as 'MSTR.US' or 'Strategy'
+    # We search for any company containing 'MSTR' or named 'Strategy'
+    mstr_btc_data = next((c for c in companies if "MSTR" in c['symbol'].upper() or c['name'] == 'Strategy'), None)
     
     if not mstr_btc_data:
-        print("Error: Could not find MSTR data in API response.")
+        # Debugging: Print all symbols found so you can see what the API is sending
+        found_symbols = [c['symbol'] for c in companies]
+        print(f"Error: Could not find MSTR. Found these symbols: {found_symbols}")
         exit(1)
     
     btc_holdings = mstr_btc_data['total_holdings']
     btc_value_usd = mstr_btc_data['total_value_usd']
-    # Derived BTC price used by CoinGecko for this calculation
-    btc_price = btc_value_usd / btc_holdings
 
     # 2. Get Stock Market Cap from Yahoo Finance
-    ticker = yf.Ticker(SYMBOL)
-    # yfinance sometimes returns None if the API is throttled; use a fallback
+    # Note: Stock markets use 'MSTR'
+    ticker = yf.Ticker("MSTR")
+    
+    # Try multiple ways to get the valuation (yfinance can be finicky)
     market_cap = ticker.info.get('marketCap')
     
     if not market_cap:
-        # Fallback: Price * Shares (approx for MSTR)
-        price = ticker.fast_info.get('lastPrice')
-        market_cap = price * 180000000 # Rough estimate if info fails
-        print(f"Warning: Using fallback market cap calculation.")
+        # Fallback to current price * approximate share count (180M shares for 2026)
+        fast_info = ticker.fast_info
+        price = fast_info.get('lastPrice')
+        market_cap = price * 180000000 
+        print(f"Using fallback calculation: {price} * 180M shares")
 
     # 3. Calculate mNAV
+    # mNAV = Market Cap / Current Value of BTC Holdings
     mnav = market_cap / btc_value_usd
+    
+    print(f"Found Company: {mstr_btc_data['name']}")
+    print(f"BTC Holdings: {btc_holdings}")
+    print(f"Market Cap: ${market_cap:,.2f}")
+    
     return round(mnav, 4)
 
 def update_json(new_mnav):
