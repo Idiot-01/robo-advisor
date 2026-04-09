@@ -42,7 +42,7 @@ def get_data():
         exit(1)
     
     btc_holdings = mstr_btc_data['total_holdings']
-    btc_value_usd = mstr_btc_data['total_value_usd']
+    btc_value_usd = mstr_btc_data['total_current_value_usd']
 
     # 2. Get Stock Market Cap from Yahoo Finance
     # Note: Stock markets use 'MSTR'
@@ -52,10 +52,10 @@ def get_data():
     market_cap = ticker.info.get('marketCap')
     
     if not market_cap:
-        # Fallback to current price * approximate share count (180M shares for 2026)
+        # Fallback to current price * approximate share count (300M shares for 2026)
         fast_info = ticker.fast_info
         price = fast_info.get('lastPrice')
-        market_cap = price * 180000000 
+        market_cap = price * 300000000 
         print(f"Using fallback calculation: {price} * 180M shares")
 
     # 3. Calculate mNAV
