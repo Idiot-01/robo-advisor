@@ -62,7 +62,7 @@
 <body>
 
     <div class="container">
-        <h2>MicroStrategy mNAV Ratio</h2>
+        <h2>MSTR mNAV Tracker</h2>
 
         <div class="controls">
             <button onclick="updateRange('1wk', this)">1W</button>
@@ -90,7 +90,7 @@
                 options: {
                     scales: {
                         x: { type: 'time', time: { unit: 'day' }, title: { display: true, text: 'Date' } },
-                        y: { title: { display: true, text: 'Ratio' }, suggestedMin: 0.5, suggestedMax: 2.0 }
+                        y: { title: { display: true, text: 'mNAV' } }
                     }
                 }
             });
