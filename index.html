@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DAT.co Monitor</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 40px auto; text-align: center; }
+        canvas { background: #f9f9f9; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <h1>MicroStrategy ($MSTR) mNAV Tracker</h1>
+    <canvas id="myChart"></canvas>
+
+    <script>
+        async function loadChart() {
+            const response = await fetch('data.json');
+            const data = await response.json();
+
+            const labels = data.map(entry => entry.date);
+            const values = data.map(entry => entry.mnav);
+
+            const ctx = document.getElementById('myChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'mNAV Ratio',
+                        data: values,
+                        borderColor: '#f7931a',
+                        tension: 0.1
+                    }]
+                }
+            });
+        }
+        loadChart();
+    </script>
+</body>
+</html>

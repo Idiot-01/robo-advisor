@@ -1,0 +1,29 @@
+name: Update mNAV Data
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs daily at midnight
+  workflow_dispatch: # Allows you to run it manually for testing
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install dependencies
+        run: pip install requests yfinance
+      - name: Run update script
+        env:
+          CG_API_KEY: ${{ secrets.CG_API_KEY }}
+        run: python update_mnav.py
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add data.json
+          git commit -m "Automated mNAV update"
+          git push
