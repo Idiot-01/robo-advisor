@@ -43,7 +43,7 @@ def generate_ai_advice(history):
     try:
         # Use 1.5-flash for better stability on free tier
         response = client.models.generate_content(
-            model="gemini-1.5-flash", 
+            model="gemini-3.0-flash", 
             contents=prompt
         )
         return response.text
