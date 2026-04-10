@@ -8,6 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/luxon"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -27,25 +28,36 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         }
 
+        /* 2. Updated AI box to handle long-form content */
         .ai-box {
             background: #eef6ff;
             border-left: 5px solid #007bff;
-            padding: 15px;
+            padding: 20px;
             margin-bottom: 25px;
             border-radius: 4px;
             font-size: 0.95rem;
-            line-height: 1.5;
+            line-height: 1.6;
             color: #333;
+            max-height: 500px; /* Limit height for the new report */
+            overflow-y: auto;   /* Scroll if report is very long */
         }
 
         .ai-header {
             font-weight: bold;
             color: #007bff;
-            margin-bottom: 5px;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
             gap: 8px;
+            position: sticky;
+            top: 0;
+            background: #eef6ff;
         }
+
+        /* Styling for Markdown elements within the AI box */
+        #ai-content h3 { margin-top: 0; font-size: 1.1rem; color: #0056b3; }
+        #ai-content ul { padding-left: 20px; }
+        #ai-content hr { border: 0; border-top: 1px solid #d0e4ff; margin: 15px 0; }
 
         .controls {
             margin-bottom: 20px;
@@ -102,32 +114,25 @@
         let myChart;
 
         async function init() {
-            // 1. Load mNAV History
             const dataRes = await fetch('data.json');
             fullData = await dataRes.json();
 
-            // 2. Load AI Advice with Error Handling
             try {
                 const adviceRes = await fetch('advice.txt');
-
-                // CHECK: If GitHub returns a 404, the status won't be 200 (OK)
-                if (!adviceRes.ok) {
-                    throw new Error("Advice file not found");
-                }
+                if (!adviceRes.ok) throw new Error("Advice file not found");
 
                 const adviceText = await adviceRes.text();
 
-                // CHECK: Ensure we didn't accidentally get an HTML error page
                 if (adviceText.includes("<!DOCTYPE html>")) {
-                    document.getElementById('ai-content').innerText = "Insight is being generated for the first time. Please check back in a few minutes.";
+                    document.getElementById('ai-content').innerText = "Insight is being generated for the first time.";
                 } else {
-                    document.getElementById('ai-content').innerText = adviceText;
+                    // 3. Use marked.parse to render Markdown into HTML
+                    document.getElementById('ai-content').innerHTML = marked.parse(adviceText);
                 }
             } catch (e) {
-                document.getElementById('ai-content').innerText = "Insight temporarily unavailable. It will appear after the next scheduled update.";
+                document.getElementById('ai-content').innerText = "Insight temporarily unavailable.";
             }
 
-            // 3. Initialize Chart
             const ctx = document.getElementById('mnavChart').getContext('2d');
             myChart = new Chart(ctx, {
                 type: 'line',
