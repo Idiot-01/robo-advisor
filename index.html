@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,60 +8,25 @@
     <script src="https://cdn.jsdelivr.net/npm/luxon"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon"></script>
     <style>
-        body {
-            font-family: sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            background: #f4f4f9;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 900px;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .controls {
-            margin-bottom: 20px;
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-
-        button {
-            padding: 8px 16px;
-            cursor: pointer;
-            border: 1px solid #ccc;
-            background: white;
-            border-radius: 4px;
-            transition: 0.2s;
-        }
-
-        button.active {
-            background: #007bff;
-            color: white;
-            border-color: #0056b3;
-        }
-
-        button:hover {
-            background: #e9ecef;
-        }
-
-        button.active:hover {
-            background: #0056b3;
-        }
+        body { font-family: 'Inter', sans-serif; background: #f8f9fa; display: flex; flex-direction: column; align-items: center; padding: 40px; }
+        .container { width: 100%; max-width: 850px; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .ai-box { background: #eef6ff; border-left: 5px solid #007bff; padding: 15px; margin-bottom: 25px; border-radius: 4px; font-size: 0.95rem; line-height: 1.5; color: #333; }
+        .ai-header { font-weight: bold; color: #007bff; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
+        .controls { margin-bottom: 20px; display: flex; gap: 8px; justify-content: center; }
+        button { padding: 8px 14px; cursor: pointer; border: 1px solid #dee2e6; background: white; border-radius: 6px; font-size: 0.85rem; font-weight: 500; }
+        button.active { background: #007bff; color: white; border-color: #007bff; }
+        canvas { margin-top: 10px; }
     </style>
 </head>
-
 <body>
 
     <div class="container">
         <h2>MSTR mNAV Tracker</h2>
+        
+        <div class="ai-box">
+            <div class="ai-header">✨ Gemini Analyst Insight</div>
+            <div id="ai-content">Analyzing latest trends...</div>
+        </div>
 
         <div class="controls">
             <button onclick="updateRange('1wk', this)">1W</button>
@@ -79,73 +43,47 @@
         let fullData = [];
         let myChart;
 
-        async function initChart() {
-            const response = await fetch('data.json');
-            fullData = await response.json();
+        async function init() {
+            // Load History
+            const dataRes = await fetch('data.json');
+            fullData = await dataRes.json();
 
+            // Load AI Advice
+            try {
+                const adviceRes = await fetch('advice.txt');
+                document.getElementById('ai-content').innerText = await adviceRes.text();
+            } catch (e) { document.getElementById('ai-content').innerText = "Insight temporarily unavailable."; }
+            
             const ctx = document.getElementById('mnavChart').getContext('2d');
             myChart = new Chart(ctx, {
                 type: 'line',
-                data: { datasets: [{ label: 'mNAV Ratio', data: [], borderColor: '#007bff', tension: 0.1, fill: false }] },
+                data: { datasets: [{ label: 'mNAV Ratio', data: [], borderColor: '#007bff', backgroundColor: 'rgba(0,123,255,0.1)', fill: true, tension: 0.3 }] },
                 options: {
                     scales: {
-                        x: { type: 'time', time: { unit: 'day' }, title: { display: true, text: 'Date' } },
-                        y: { title: { display: true, text: 'mNAV' } }
+                        x: { type: 'time', time: { unit: 'month' } },
+                        y: { min: null, max: null, grace: '10%' }
                     }
                 }
             });
-
-            // Default view: 1 Year
             updateRange('1y', document.querySelector('button.active'));
         }
 
         function updateRange(range, btn) {
-            // 1. Update UI buttons
             document.querySelectorAll('button').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            const now = luxon.DateTime.now();
-            let startDate;
+            const start = luxon.DateTime.now().minus({
+                weeks: range === '1wk' ? 1 : 0,
+                months: range === '1m' ? 1 : range === '3m' ? 3 : range === '6m' ? 6 : 0,
+                years: range === '1y' ? 1 : 0
+            });
 
-            // 2. Determine start date
-            switch (range) {
-                case '1wk': startDate = now.minus({ weeks: 1 }); break;
-                case '1m': startDate = now.minus({ months: 1 }); break;
-                case '3m': startDate = now.minus({ months: 3 }); break;
-                case '6m': startDate = now.minus({ months: 6 }); break;
-                case '1y': startDate = now.minus({ years: 1 }); break;
-                default: startDate = now.minus({ years: 1 });
-            }
-
-            // 3. Filter data
-            const filtered = fullData.filter(d => luxon.DateTime.fromISO(d.date) >= startDate);
-
-            // 4. Update Dataset
+            const filtered = fullData.filter(d => luxon.DateTime.fromISO(d.date) >= start);
             myChart.data.datasets[0].data = filtered.map(d => ({ x: d.date, y: d.mnav }));
-
-            // 5. ADJUST Y-AXIS BEHAVIOR
-            // Resetting min/max to 'null' allows Chart.js to auto-calculate based on visible data
-            myChart.options.scales.y.min = null;
-            myChart.options.scales.y.max = null;
-
-            // Optional: Add a small 5% padding so the line doesn't touch the top/bottom edges
-            myChart.options.plugins.autocolors = false; // Ensure no plugin interference
-
-            // 6. Adjust X-axis granularity
-            if (range === '1wk') {
-                myChart.options.scales.x.time.unit = 'day';
-            } else if (range === '1y') {
-                myChart.options.scales.x.time.unit = 'month';
-            } else {
-                myChart.options.scales.x.time.unit = 'week';
-            }
-
-            // 7. Final Update call
             myChart.update();
         }
 
-        initChart();
+        init();
     </script>
 </body>
-
 </html>

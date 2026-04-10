@@ -1,8 +1,8 @@
 name: Update mNAV Data
 on:
   schedule:
-    - cron: '0 0 * * *' # Runs daily at midnight
-  workflow_dispatch: # Allows you to run it manually for testing
+    - cron: '0 0 * * *' # Runs daily at midnight UTC
+  workflow_dispatch: # Allows running manually for testing
 
 jobs:
   build:
@@ -10,20 +10,29 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fetches all history so data.json isn't "missing"
+
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
+
       - name: Install dependencies
-        run: pip install requests yfinance
+        run: pip install requests yfinance google-genai
+
       - name: Run update script
         env:
           CG_API_KEY: ${{ secrets.CG_API_KEY }}
-        run: python update_mnav.py
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          git pull origin main # Ensure we have the latest data.json before running
+          python update_mnav.py
+
       - name: Commit and Push changes
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
-          git add data.json
-          git commit -m "Automated mNAV update"
-          git push
+          git add data.json advice.txt
+          # Only commit if there are actually changes to avoid workflow errors
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Automated mNAV and AI update" && git push)

@@ -3,100 +3,69 @@ import requests
 import yfinance as yf
 from datetime import datetime
 import os
+from google import genai
 
 # Configuration
 SYMBOL = "MSTR"
-# Get the key from GitHub Secrets environment variable
 CG_API_KEY = os.getenv("CG_API_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-def get_data():
-    if not CG_API_KEY:
-        print("Error: CG_API_KEY not found in environment variables.")
-        exit(1)
-
+def get_mnav_data():
     # 1. Get BTC Holdings from CoinGecko
-    # We use the 'bitcoin' treasury endpoint
     url = "https://api.coingecko.com/api/v3/companies/public_treasury/bitcoin"
-    headers = {
-        "accept": "application/json",
-        "x-cg-demo-api-key": CG_API_KEY
-    }
-
+    headers = {"accept": "application/json", "x-cg-demo-api-key": CG_API_KEY}
     response = requests.get(url, headers=headers)
-    
-    if response.status_code != 200:
-        print(f"API Error {response.status_code}: {response.text}")
-        exit(1)
-
     data = response.json()
-    companies = data.get('companies', [])
-
-    # In 2026, MSTR is listed as 'MSTR.US' or 'Strategy'
-    # We search for any company containing 'MSTR' or named 'Strategy'
-    mstr_btc_data = next((c for c in companies if "MSTR" in c['symbol'].upper() or c['name'] == 'Strategy'), None)
-    
-    if not mstr_btc_data:
-        # Debugging: Print all symbols found so you can see what the API is sending
-        found_symbols = [c['symbol'] for c in companies]
-        print(f"Error: Could not find MSTR. Found these symbols: {found_symbols}")
-        exit(1)
-    
+    mstr_btc_data = next((c for c in data['companies'] if "MSTR" in c['symbol'].upper()), None)
     btc_holdings = mstr_btc_data['total_holdings']
-    btc_value_usd = mstr_btc_data['total_current_value_usd']
 
-    # 2. Get Stock Market Cap from Yahoo Finance
-    # Note: Stock markets use 'MSTR'
-    ticker = yf.Ticker("MSTR")
-    
-    # Try multiple ways to get the valuation (yfinance can be finicky)
+    # 2. Get Market Cap from Yahoo Finance
+    ticker = yf.Ticker(SYMBOL)
     market_cap = ticker.info.get('marketCap')
+    btc_price = yf.Ticker("BTC-USD").fast_info.get('lastPrice')
     
-    if not market_cap:
-        # Fallback to current price * approximate share count (300M shares for 2026)
-        fast_info = ticker.fast_info
-        price = fast_info.get('lastPrice')
-        market_cap = price * 300000000 
-        print(f"Using fallback calculation: {price} * 180M shares")
+    btc_value_usd = btc_holdings * btc_price
+    return round(market_cap / btc_value_usd, 4)
 
-    # 3. Calculate mNAV
-    # mNAV = Market Cap / Current Value of BTC Holdings
-    mnav = market_cap / btc_value_usd
+def generate_ai_advice(history):
+    if not GEMINI_API_KEY:
+        return "AI Analysis unavailable: Key missing."
     
-    print(f"Found Company: {mstr_btc_data['name']}")
-    print(f"BTC Holdings: {btc_holdings}")
-    print(f"Market Cap: ${market_cap:,.2f}")
+    client = genai.Client(api_key=GEMINI_API_KEY)
+    recent_data = history[-30:] # Last 30 days for context
     
-    return round(mnav, 4)
+    prompt = f"""
+    Analyze this mNAV (Market-to-Asset Value) time-series: {json.dumps(recent_data)}
+    Current mNAV is {recent_data[-1]['mnav']}. 
+    Provide a 2-sentence financial insight on the current trend and whether it represents a premium or discount.
+    """
+    
+    response = client.models.generate_content(model="gemini-2.0-flash", contents=prompt)
+    return response.text
 
-def update_json(new_mnav):
-    # Ensure the file exists
-    if not os.path.exists('data.json'):
-        with open('data.json', 'w') as f:
-            json.dump([], f)
-
-    with open('data.json', 'r') as f:
-        try:
+def update_files(new_mnav):
+    # Load existing data with safety check
+    if os.path.exists('data.json') and os.path.getsize('data.json') > 0:
+        with open('data.json', 'r') as f:
             data = json.load(f)
-        except json.JSONDecodeError:
-            data = []
+    else:
+        data = []
+
+    new_entry = {"date": datetime.now().strftime("%Y-%m-%d"), "mnav": new_mnav}
     
-    new_entry = {
-        "date": datetime.now().strftime("%Y-%m-%d"),
-        "mnav": new_mnav
-    }
-    
-    # Only append if today's date isn't already there
+    # Avoid duplicates
     if not data or data[-1]['date'] != new_entry['date']:
         data.append(new_entry)
-        # Keep only last 30 days of data to keep the file small
-        data = data[-30:] 
-        with open('data.json', 'w') as f:
-            json.dump(data, f, indent=2)
-        print(f"Successfully added entry for {new_entry['date']}")
-    else:
-        print("Entry for today already exists. Skipping.")
+
+    # Save Data
+    with open('data.json', 'w') as f:
+        json.dump(data, f, indent=2)
+
+    # Generate and Save Advice
+    advice = generate_ai_advice(data)
+    with open('advice.txt', 'w') as f:
+        f.write(advice)
 
 if __name__ == "__main__":
-    val = get_data()
-    print(f"Calculated mNAV: {val}")
-    update_json(val)
+    val = get_mnav_data()
+    update_files(val)
