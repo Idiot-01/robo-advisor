@@ -37,9 +37,8 @@ def generate_ai_advice(history):
     prompt = f"Analyze this mNAV time-series and provide a 2-sentence insight: {json.dumps(recent_data)}"
     
     try:
-        # Using gemini-2.0-flash for current compatibility
         response = client.models.generate_content(
-            model="gemini-2.0-flash", 
+            model="gemini-3-flash-preview", 
             contents=prompt
         )
         return response.text
