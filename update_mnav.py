@@ -36,14 +36,18 @@ def generate_ai_advice(history):
     client = genai.Client(api_key=GEMINI_API_KEY)
     recent_data = history[-30:]
     
-    prompt = f"Analyze this mNAV time-series: {json.dumps(recent_data)}"
+    prompt = f"""
+    Analyze this mNAV (Market-to-Asset Value) time-series: {json.dumps(recent_data)}
+    Current mNAV is {recent_data[-1]['mnav']}. 
+    Provide a 2-sentence financial insight on the current trend and whether it represents a premium or discount.
+    """
 
     # Robust Retry Loop
     max_retries = 5
     for i in range(max_retries):
         try:
             response = client.models.generate_content(
-                model="gemini-3.0-flash", 
+                model="gemini-2.0-flash", 
                 contents=prompt
             )
             return response.text

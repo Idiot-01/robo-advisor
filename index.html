@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,21 +9,78 @@
     <script src="https://cdn.jsdelivr.net/npm/luxon"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; background: #f8f9fa; display: flex; flex-direction: column; align-items: center; padding: 40px; }
-        .container { width: 100%; max-width: 850px; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
-        .ai-box { background: #eef6ff; border-left: 5px solid #007bff; padding: 15px; margin-bottom: 25px; border-radius: 4px; font-size: 0.95rem; line-height: 1.5; color: #333; }
-        .ai-header { font-weight: bold; color: #007bff; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
-        .controls { margin-bottom: 20px; display: flex; gap: 8px; justify-content: center; }
-        button { padding: 8px 14px; cursor: pointer; border: 1px solid #dee2e6; background: white; border-radius: 6px; font-size: 0.85rem; font-weight: 500; }
-        button.active { background: #007bff; color: white; border-color: #007bff; }
-        canvas { margin-top: 10px; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 850px;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .ai-box {
+            background: #eef6ff;
+            border-left: 5px solid #007bff;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        .ai-header {
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        button {
+            padding: 8px 14px;
+            cursor: pointer;
+            border: 1px solid #dee2e6;
+            background: white;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        button.active {
+            background: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        canvas {
+            margin-top: 10px;
+        }
     </style>
 </head>
+
 <body>
 
     <div class="container">
         <h2>MSTR mNAV Tracker</h2>
-        
+
         <div class="ai-box">
             <div class="ai-header">✨ Gemini Analyst Insight</div>
             <div id="ai-content">Analyzing latest trends...</div>
@@ -44,16 +102,32 @@
         let myChart;
 
         async function init() {
-            // Load History
+            // 1. Load mNAV History
             const dataRes = await fetch('data.json');
             fullData = await dataRes.json();
 
-            // Load AI Advice
+            // 2. Load AI Advice with Error Handling
             try {
                 const adviceRes = await fetch('advice.txt');
-                document.getElementById('ai-content').innerText = await adviceRes.text();
-            } catch (e) { document.getElementById('ai-content').innerText = "Insight temporarily unavailable."; }
-            
+
+                // CHECK: If GitHub returns a 404, the status won't be 200 (OK)
+                if (!adviceRes.ok) {
+                    throw new Error("Advice file not found");
+                }
+
+                const adviceText = await adviceRes.text();
+
+                // CHECK: Ensure we didn't accidentally get an HTML error page
+                if (adviceText.includes("<!DOCTYPE html>")) {
+                    document.getElementById('ai-content').innerText = "Insight is being generated for the first time. Please check back in a few minutes.";
+                } else {
+                    document.getElementById('ai-content').innerText = adviceText;
+                }
+            } catch (e) {
+                document.getElementById('ai-content').innerText = "Insight temporarily unavailable. It will appear after the next scheduled update.";
+            }
+
+            // 3. Initialize Chart
             const ctx = document.getElementById('mnavChart').getContext('2d');
             myChart = new Chart(ctx, {
                 type: 'line',
@@ -86,4 +160,5 @@
         init();
     </script>
 </body>
+
 </html>

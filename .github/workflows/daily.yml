@@ -19,7 +19,7 @@ jobs:
           python-version: '3.9'
 
       - name: Install dependencies
-        run: pip install requests yfinance google-genai
+        run: pip install requests yfinance google-genai google-api-core
 
       - name: Run update script
         env:
