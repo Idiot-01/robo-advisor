@@ -31,33 +31,25 @@ def get_mnav_data():
 
 def generate_ai_advice(history):
     if not GEMINI_API_KEY:
-        return "AI Analysis unavailable: Key missing."
+        return "AI Analysis unavailable."
     
+    # Use the SDK's built-in client
     client = genai.Client(api_key=GEMINI_API_KEY)
-    recent_data = history[-30:]
     
-    prompt = f"""
-    Analyze this mNAV (Market-to-Asset Value) time-series: {json.dumps(recent_data)}
-    Current mNAV is {recent_data[-1]['mnav']}. 
-    Provide a 2-sentence financial insight on the current trend and whether it represents a premium or discount.
-    """
-
-    # Robust Retry Loop
-    max_retries = 5
-    for i in range(max_retries):
-        try:
-            response = client.models.generate_content(
-                model="gemini-2.0-flash", 
-                contents=prompt
-            )
-            return response.text
-        except exceptions.ResourceExhausted:
-            if i < max_retries - 1:
-                wait_time = (i + 1) * 5 # Wait 5s, then 10s
-                print(f"Rate limit hit. Retrying in {wait_time}s...")
-                time.sleep(wait_time)
-            else:
-                return "The analyst is busy right now. Check back tomorrow!"
+    # Context: 30 days of history
+    recent_data = history[-30:]
+    prompt = f"Analyze this mNAV time-series and provide a 2-sentence insight: {json.dumps(recent_data)}"
+    
+    try:
+        # Use 1.5-flash for better stability on free tier
+        response = client.models.generate_content(
+            model="gemini-1.5-flash", 
+            contents=prompt
+        )
+        return response.text
+    except Exception as e:
+        print(f"Gemini Error: {e}")
+        return "Market analysis currently updating..."
 
 def update_files(new_mnav):
     # Load existing data with safety check
