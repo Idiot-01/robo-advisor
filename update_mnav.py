@@ -34,7 +34,7 @@ def generate_ai_advice(history):
     
     client = genai.Client(api_key=GEMINI_API_KEY)
     recent_data = history[-30:]
-    prompt = f"Analyze this mNAV time-series and provide a 2-sentence insight: {json.dumps(recent_data)}"
+    prompt = f"Analyze this mNAV time-series: {json.dumps(recent_data)}, and provide the following: 1. What the current mNAV value signifies. 2. What the current trend signifies 3. Whether now is a good time to buy in / sell MSTR."
     
     try:
         response = client.models.generate_content(
