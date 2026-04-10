@@ -4,6 +4,8 @@ import yfinance as yf
 from datetime import datetime
 import os
 from google import genai
+import time
+from google.api_core import exceptions
 
 # Configuration
 SYMBOL = "MSTR"
@@ -32,16 +34,26 @@ def generate_ai_advice(history):
         return "AI Analysis unavailable: Key missing."
     
     client = genai.Client(api_key=GEMINI_API_KEY)
-    recent_data = history[-30:] # Last 30 days for context
+    recent_data = history[-30:]
     
-    prompt = f"""
-    Analyze this mNAV (Market-to-Asset Value) time-series: {json.dumps(recent_data)}
-    Current mNAV is {recent_data[-1]['mnav']}. 
-    Provide a 2-sentence financial insight on the current trend and whether it represents a premium or discount.
-    """
-    
-    response = client.models.generate_content(model="gemini-2.0-flash", contents=prompt)
-    return response.text
+    prompt = f"Analyze this mNAV time-series: {json.dumps(recent_data)}"
+
+    # Robust Retry Loop
+    max_retries = 5
+    for i in range(max_retries):
+        try:
+            response = client.models.generate_content(
+                model="gemini-3.0-flash", 
+                contents=prompt
+            )
+            return response.text
+        except exceptions.ResourceExhausted:
+            if i < max_retries - 1:
+                wait_time = (i + 1) * 5 # Wait 5s, then 10s
+                print(f"Rate limit hit. Retrying in {wait_time}s...")
+                time.sleep(wait_time)
+            else:
+                return "The analyst is busy right now. Check back tomorrow!"
 
 def update_files(new_mnav):
     # Load existing data with safety check
