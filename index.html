@@ -139,8 +139,23 @@
                 data: { datasets: [{ label: 'mNAV Ratio', data: [], borderColor: '#007bff', backgroundColor: 'rgba(0,123,255,0.1)', fill: true, tension: 0.3 }] },
                 options: {
                     scales: {
-                        x: { type: 'time', time: { unit: 'month' } },
-                        y: { min: null, max: null, grace: '10%' }
+                        x: { 
+                            type: 'time', 
+                            time: { unit: 'month' },
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        },
+                        y: { 
+                            min: null, 
+                            max: null, 
+                            grace: '10%',
+                            title: {
+                                display: true,
+                                text: 'mNAV Ratio'
+                            }
+                        }
                     }
                 }
             });
