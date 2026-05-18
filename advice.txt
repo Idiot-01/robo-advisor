@@ -1,40 +1,35 @@
-Based on the time-series provided (which spans from April 2025 to May 2026), here is the analysis of the mNAV (Price-to-Net Asset Value) for MicroStrategy (MSTR).
+Based on the time-series data provided, here is an analysis of MicroStrategy’s (MSTR) mNAV (Modified Net Asset Value).
 
-### 1. What the Current mNAV Value Signifies
-The final entry in your data is **0.9743** (May 17, 2026).
+### 1. What the current mNAV value signifies
+The most recent value (2026-05-18) is **0.9887**.
 
-In the context of MSTR, an mNAV of **1.0** represents "Parity"—where the stock price perfectly matches the value of the Bitcoin held by the company (plus the value of its software business).
-*   **Significance:** A value of **0.9743** means that MSTR is currently trading at a **2.57% discount** to its holdings. 
-*   Investors are essentially buying Bitcoin at a slightly cheaper rate than the spot market price while getting the underlying software business for free. This is a rare occurrence for MSTR, which historically trades at a premium.
+*   **At par with assets:** An mNAV of 1.0 means the market capitalization of the company is exactly equal to the value of its Bitcoin holdings (plus its software business).
+*   **The "Discount" Phase:** At **0.9887**, MSTR is trading at a very slight **discount (roughly 1.1%)** to its underlying assets. Effectively, you are buying Bitcoin through the stock at a price slightly cheaper than the spot market price, while getting the software business and the company's "intelligent leverage" for free.
+*   **Historical Context:** Historically, MSTR has frequently traded at a **premium** (mNAV of 1.5 to 2.5). Trading below 1.0 is statistically rare for this stock and usually indicates a period of extreme market pessimism or "de-leveraging" by equity investors.
 
----
+### 2. What the trend signifies
 
-### 2. What the Trend Signifies
+#### The 1-Year Trend (April 2025 – May 2026)
+*   **The Great Compression:** In April/May 2025, MSTR was trading at a massive premium (peaking at **2.02**). This meant investors were paying double the value of the actual Bitcoin held by the company.
+*   **The Collapse:** From June 2025 through November 2025, the mNAV entered a steady decline, falling below the 1.0 threshold in mid-November.
+*   **The Bottom:** The mNAV bottomed out between **0.77 and 0.80** in early 2026. This signified a "capitulation" phase where the stock was significantly undervalued relative to its Bitcoin treasury.
 
-#### The 1-Year Trend (May 2025 – May 2026): **Severe De-leveraging and Recovery**
-*   **The Peak:** In May 2025, the mNAV was over **2.0**. This indicates a period of extreme "froth" where investors were willing to pay double the value of the underlying Bitcoin to own MSTR shares.
-*   **The Collapse:** From June 2025 through November 2025, the mNAV underwent a massive "multiple compression." It crashed from 1.70 down to 0.90. This signifies a period where the market lost its appetite for the MSTR premium, likely due to a Bitcoin bear market or a shift in investor sentiment toward spot Bitcoin ETFs.
-*   **The Floor:** The mNAV found a hard floor between **0.77 and 0.80** in early 2026. This was the "maximum pain" point where the stock was significantly undervalued relative to its assets.
+#### The Past Month (April 18, 2026 – May 18, 2026)
+*   **Aggressive Recovery:** The trend over the last 30 days is **strongly bullish**. The mNAV has climbed from **0.88** (April 17) to **0.9887** (May 18).
+*   **Closing the Gap:** This signifies that equity investors are returning to the stock faster than Bitcoin’s price is rising. The market is "re-rating" MicroStrategy, moving it from a "distressed discount" back toward a "fair value" or "premium" state.
 
-#### The Past Month (April 17, 2026 – May 17, 2026): **Bullish Mean Reversion**
-*   In the last 30 days, the mNAV has climbed from **0.88** to a peak of **1.03**, settling at **0.97**.
-*   **Significance:** This trend indicates that confidence is returning. The market is moving away from the "discount" phase and attempting to re-establish a premium. The rapid rise from 0.80 levels suggests that institutional buyers likely stepped in to buy the "cheap" BTC exposure provided by the stock.
+### 3. Is now a good time to Buy or Sell?
 
----
+**The Case for Buying:**
+*   **Still under 1.0:** Despite the recent rally, the mNAV is still below 1.0. Historically, buying MSTR when the mNAV is < 1.1 has been an excellent entry point for long-term holders. You are not yet paying the "MSTR Premium" that usually exists during bull markets.
+*   **Momentum:** The "past month" trend shows a clear upward trajectory. Momentum is shifting from bearish to bullish.
 
-### 3. Is it a good time to Buy or Sell MSTR?
-
-**The Case for BUYING:**
-*   **Historical Discount:** MSTR has spent most of its recent history trading at a premium (often 1.5x or higher). Buying at **0.97** is statistically "cheap." You are buying the assets at a discount.
-*   **Momentum:** The past month shows a strong recovery trend. The mNAV is "mean-reverting" (moving back toward its average premium).
-*   **Leverage:** If Bitcoin's price rises from here, MSTR typically outperforms BTC when the mNAV is expanding. Since the mNAV is currently low, there is significant "room to run" for the stock price to outpace Bitcoin.
-
-**The Case for SELLING (or Caution):**
-*   **Loss of Premium:** The fact that MSTR spent months trading below 1.0 (from Nov 2025 to May 2026) suggests that the "MSTR Premium" is fragile. If the market now prefers spot ETFs, MSTR may never return to the 2.0+ levels seen in early 2025.
-*   **Resistance at Parity:** The data shows a brief touch at **1.03** (May 12) followed by a slight drop back to **0.97**. This suggests that "1.0" is acting as a psychological resistance level.
+**The Case for Selling (or Waiting):**
+*   **Resistance at 1.0:** The 1.0 mNAV level often acts as psychological resistance. If the stock fails to break back into a "Premium" state (mNAV > 1.0), it may stall here.
+*   **Short-term Overbought:** The mNAV has moved from 0.82 to 0.99 in roughly six weeks. This is a fast move; a brief "cooling off" period or consolidation around the 1.0 level is likely.
 
 ### Final Verdict:
-**Now is a "Value Buy" opportunity.** 
-Compared to the 1-year history where you would have paid a 100% premium (mNAV 2.0), paying a ~3% discount (mNAV 0.97) represents a high margin of safety relative to the company's Bitcoin holdings. However, do not expect a quick return to a 2.0 mNAV; the trend suggests the market is currently happy to value MSTR much closer to its "fair value" (1.0) than it was a year ago.
+**Neutral to Bullish.**
+If you believe Bitcoin will continue to rise, buying at an mNAV of **0.98** is fundamentally "safer" than it was a year ago when the mNAV was **1.83**. You are getting more Bitcoin per dollar invested today than you were then. However, the "easy money" of the 0.77 discount floor has already been made. 
 
-***Disclaimer:** This is an analysis of provided data and does not constitute financial advice. MSTR is a highly volatile instrument tied to the price of Bitcoin.*
+*Disclaimer: This is an analysis of mathematical ratios and market trends. It is not financial advice.*
