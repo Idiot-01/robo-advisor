@@ -1,1 +1,39 @@
-Market analysis currently updating...
+Based on the time-series data provided (running from April 2025 through May 2026), here is the analysis of MicroStrategy’s (MSTR) **mNAV** (Market-to-Net Asset Value).
+
+### 1. What the current mNAV value signifies
+The "current" value (as of May 23, 2026) is **0.8817**.
+
+*   **Trading at a Discount:** An mNAV of 1.0 means the market cap of the company exactly equals the value of its Bitcoin holdings. A value of **0.88** signifies that MSTR is trading at an **approximately 12% discount** to its Net Asset Value (NAV).
+*   **The "Cheap BTC" Signal:** This indicates that for every $1.00 worth of Bitcoin MicroStrategy owns, the stock market is only valuing that position at roughly $0.88. Effectively, by buying the stock, you are acquiring Bitcoin at a discount while receiving the core software business for "free."
+
+---
+
+### 2. The Trend Analysis
+
+#### 1-Year Trend (May 2025 – May 2026)
+*   **Massive Contraction:** One year ago (May 2025), the mNAV was at a significant **premium**, peaking near **2.02**. This meant investors were paying double the value of the underlying Bitcoin to own MSTR.
+*   **Mean Reversion:** Throughout the year, the mNAV has seen a steady, aggressive decline. It broke below parity (1.0) in November 2025 and has struggled to stay above 1.0 ever since. 
+*   **Significance:** The "MSTR Premium"—which often exists because of the company's ability to use leverage to buy more Bitcoin—has evaporated over the last year. The market has shifted from "euphoric premium" to "skeptical discount."
+
+#### Past Month (Late April 2026 – May 2026)
+*   **The Failed Breakout:** In early May, the mNAV attempted to climb back above 1.0 (reaching **1.03** on May 12).
+*   **Recent Slide:** Since that mid-month peak, the value has dropped from 1.03 to 0.88 in just 11 days.
+*   **Significance:** The short-term trend is **bearish.** The stock is losing value faster than the underlying Bitcoin is (or Bitcoin is flat/down and the stock is selling off more aggressively).
+
+---
+
+### 3. Is now a good time to Buy or Sell?
+
+**The Case for BUYING:**
+*   **Historical Opportunity:** Historically, buying MSTR when it trades at a discount (below 1.0) has been a highly profitable strategy for Bitcoin bulls. You are essentially entering a "leveraged" Bitcoin position at a price cheaper than the spot price of Bitcoin itself.
+*   **Value Play:** At 0.88, the "risk" of the premium collapsing has already materialized. You are no longer "overpaying" for the proxy.
+
+**The Case for SELLING (or Waiting):**
+*   **Negative Momentum:** The trend is clearly downward. The mNAV dropped from 1.03 to 0.88 very quickly, suggesting a lack of buyer support even at these "cheap" levels.
+*   **Structural Shift:** If Bitcoin ETFs are siphoning away all the demand that used to go to MSTR, the historical "premium" may never return, and the stock could remain at a permanent discount.
+
+### Final Verdict:
+*   **If you are Bullish on Bitcoin:** **NOW IS A BUY.** Buying at an 0.88 mNAV is a "margin of safety" entry. You are getting exposure to BTC at a 12% discount.
+*   **If you are a Momentum Trader:** **SELL or WAIT.** The mNAV is in a free-fall over the last two weeks. There is no evidence yet that the bottom of this discount has been reached (it hit 0.77 in February, so it could go lower).
+
+**Summary:** You are currently looking at a "Value Entry." It is a fundamentally strong time to buy the assets, but a weak time for price action.
