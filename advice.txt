@@ -1,1 +1,45 @@
-Market analysis currently updating...
+This analysis is based on the provided **mNAV (market Net Asset Value)** time-series for MicroStrategy (MSTR), spanning from April 2025 to June 2026.
+
+### 1. What the Current mNAV Value Signifies
+**Current Value (June 13, 2026): 0.8165**
+
+In the context of MicroStrategy, mNAV (often referred to as the "NAV Premium") represents the ratio of the company’s Market Capitalization to the value of its Bitcoin holdings.
+*   **A value of 1.00** means the market is pricing MSTR exactly at the value of its Bitcoin.
+*   **A value > 1.00** means the stock is trading at a premium (investors are paying extra for the company’s software business, its ability to stack more BTC, or its intelligent use of leverage).
+*   **A value < 1.00** means the stock is trading at a **discount**.
+
+**Significance:** At **0.8165**, MSTR is trading at an approximately **18.3% discount** to its underlying Bitcoin holdings. This suggests that the market is currently "undervaluing" the company relative to the digital assets on its balance sheet. This is historically rare for MSTR, which typically trades at a premium.
+
+---
+
+### 2. What the Trend Signifies
+
+#### **1-Year Trend (June 2025 – June 2026): Massive De-Rating**
+*   **Starting Point (June 2025):** ~1.70 to 1.75.
+*   **Ending Point (June 2026):** 0.8165.
+*   **Significance:** Over the past year, MSTR has undergone a massive "de-premiumization." A year ago, investors were willing to pay a 70% premium over the Bitcoin price to own MSTR. Today, they are demanding a discount. This usually signifies a shift from extreme bullishness/speculation to extreme caution or lack of interest in the "leveraged Bitcoin play" model.
+
+#### **Past Month Trend (May 13, 2026 – June 13, 2026): Renewed Weakness**
+*   **May 13, 2026:** 0.9748 (Near parity)
+*   **June 13, 2026:** 0.8165 (Deep discount)
+*   **Significance:** After a brief recovery in early May where the stock almost reached its "fair value" (1.0), it has spent the last 30 days in a steady decline. The market is currently selling off MSTR faster than the price of Bitcoin is falling (or MSTR is failing to keep up with a Bitcoin rally). This suggests low investor confidence in the stock's ability to outperform BTC in the short term.
+
+---
+
+### 3. Is it a good time to Buy or Sell?
+
+Based strictly on the **mNAV metric** provided:
+
+#### **The Case for BUYING:**
+*   **Historical Alpha:** Historically, MSTR trades at a premium (often 1.5x to 2.5x). Buying at a **0.81 discount** is effectively buying "Bitcoin at a discount" while gaining the company's software business for free.
+*   **Mean Reversion:** If the mNAV eventually returns to its historical mean (approx. 1.5), the stock would see a massive price increase even if the price of Bitcoin stays flat.
+*   **The "Floor":** A discount of ~18% is a significant margin of safety. Investors often view an mNAV below 1.0 as a "strong buy" zone because it represents a dislocation between the stock price and the liquid assets held by the company.
+
+#### **The Case for SELLING (or Holding):**
+*   **Momentum:** The trend is currently down. The mNAV has fallen from 2.02 (May 2025) to 0.81 (June 2026) without finding a permanent floor. "Catching a falling knife" is risky if the market continues to de-value MSTR’s leverage model.
+*   **Structural Shift:** If the market has decided that MSTR should no longer trade at a premium (perhaps due to the availability of spot BTC ETFs), then the 0.81 value might be the "new normal" rather than a temporary discount.
+
+### **Final Verdict:**
+From a **Value/Fundamental** perspective, this is a **Strong Buy** signal. You are buying the underlying asset (BTC) for $0.81 on the dollar. However, from a **Momentum** perspective, the trend is still bearish. 
+
+**Strategy:** If you believe in the long-term value of Bitcoin and MicroStrategy's treasury strategy, this is an entry point that offers a significant discount rarely seen in this ticker. If you are a short-term trader, wait for the mNAV to stabilize and start curving upward (e.g., crossing back above 0.85) before entering.
